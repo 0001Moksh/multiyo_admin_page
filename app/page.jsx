@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation'
 import styles from './landing.module.css'
-import Image from 'next/image'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -13,13 +12,12 @@ export default function LandingPage() {
         <div className={styles.hero}>
           <h1 className={styles.title}>
             <span className={styles.brand}>
-              <Image
-                src="/logo-no-bg-square.png" // Assuming your logo file is named 'logo.png' in the public folder; update if different
+              <img
+                src="/logo-no-bg-square.png"
                 alt="MultiYO Logo"
-                width={150}
-                height={150}
+                width="150"
+                height="150"
                 className="logo"
-                priority // For faster loading on landing page
               />
             </span>
             <span className={styles.subtitle}>Admin Dashboard</span>
