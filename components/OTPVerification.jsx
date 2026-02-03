@@ -52,7 +52,7 @@ export default function OTPVerification() {
 
       login(data.token, data.email)
       sessionStorage.removeItem('adminEmail')
-      router.push('/')
+      router.push('/dashboard')
     } catch (err) {
       setError(err.message || 'An error occurred')
       setLoading(false)

@@ -3,6 +3,8 @@ import { getBannersCollection } from '@/lib/db'
 import { requireAuth } from '@/lib/middleware'
 import { fetchShopifyCollections } from '@/lib/shopify'
 
+export const dynamic = 'force-dynamic'
+
 export async function PUT(request, { params }) {
   try {
     const auth = await requireAuth(request)

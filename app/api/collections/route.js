@@ -1,6 +1,8 @@
 import { fetchShopifyCollections } from '@/lib/shopify'
 import { requireAuth } from '@/lib/middleware'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request) {
   try {
     const auth = await requireAuth(request)
