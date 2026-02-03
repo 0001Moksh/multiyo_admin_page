@@ -16,10 +16,6 @@
       "dest": "/_next/$1"
     },
     {
-      "src": "/public/(.*)",
-      "dest": "/public/$1"
-    },
-    {
       "src": "/favicon.ico",
       "dest": "/favicon.ico"
     },
