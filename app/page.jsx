@@ -14,7 +14,7 @@ export default function LandingPage() {
             <span className={styles.brand}>
               <img
                 src="/logo-no-bg-square.png"
-                alt="MultiYO Logo"
+                alt="MultiYO"
                 width="150"
                 height="150"
                 className="logo"

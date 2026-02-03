@@ -14,7 +14,7 @@ export async function POST(request) {
 
     const normalizedEmail = email.trim().toLowerCase()
 
-    const result = verifyOTP(normalizedEmail, otp.trim())
+    const result = await verifyOTP(normalizedEmail, otp.trim())
 
     if (!result.valid) {
       return Response.json(

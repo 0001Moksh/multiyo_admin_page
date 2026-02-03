@@ -25,7 +25,7 @@ export async function POST(request) {
     try {
       const otp = generateOTP()
       console.log(`Generated OTP: ${otp}`)
-      storeOTP(normalizedEmail, otp)
+      await storeOTP(normalizedEmail, otp)
       
       try {
         await sendOTPEmail(normalizedEmail, otp)
