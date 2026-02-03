@@ -97,7 +97,13 @@
 .footer {
   margin-top: 30px;
   font-size: 14px;
-  color: #a0aec0;
+  color: #63758c;
+}
+
+.footerLink {
+  color: #011779;
+  font-size: 15px;
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {

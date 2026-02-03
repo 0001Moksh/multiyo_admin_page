@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import styles from './landing.module.css'
+import Image from 'next/image'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -11,39 +12,35 @@ export default function LandingPage() {
       <div className={styles.content}>
         <div className={styles.hero}>
           <h1 className={styles.title}>
-            <span className={styles.brand}>MultiYO</span>
+            <span className={styles.brand}>
+              <Image
+                src="/logo-no-bg-square.png" // Assuming your logo file is named 'logo.png' in the public folder; update if different
+                alt="MultiYO Logo"
+                width={150}
+                height={150}
+                className="logo"
+                priority // For faster loading on landing page
+              />
+            </span>
             <span className={styles.subtitle}>Admin Dashboard</span>
           </h1>
-          
+
           <p className={styles.description}>
-            Manage your Shopify collections and banners with ease. 
+            Manage your Shopify collections and banners with ease.
             Streamline your e-commerce operations from one powerful dashboard.
           </p>
 
-          <div className={styles.features}>
-            <div className={styles.feature}>
-              <span className={styles.icon}>📦</span>
-              <span>Collection Management</span>
-            </div>
-            <div className={styles.feature}>
-              <span className={styles.icon}>🖼️</span>
-              <span>Banner Control</span>
-            </div>
-            <div className={styles.feature}>
-              <span className={styles.icon}>🔒</span>
-              <span>Secure Access</span>
-            </div>
-          </div>
-
-          <button 
+          <button
             onClick={() => router.push('/login')}
             className={styles.loginButton}
           >
             Admin Login
           </button>
-
           <p className={styles.footer}>
-            Authorized personnel only
+            @Powered By{' '}
+            <a href="https://nexyugtech.com" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>
+              NexYug Tech
+            </a>
           </p>
         </div>
       </div>
