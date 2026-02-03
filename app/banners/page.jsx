@@ -251,7 +251,7 @@ function BannerManagerContent() {
   const getAvailableCollections = () => {
     // Get all collection IDs that already have banners assigned
     const assignedCollectionIds = new Set(banners.map((b) => b.collectionId))
-    
+
     // Return only collections that don't have banners
     return collections.filter((col) => !assignedCollectionIds.has(col.id))
   }
@@ -264,9 +264,9 @@ function BannerManagerContent() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Banner Manager</h1>
+        <h1>Banner Management</h1>
         <div className={styles.headerActions}>
-          <button onClick={() => router.push('/')} className={styles.secondaryBtn}>
+          <button onClick={() => router.push('/dashboard')} className={styles.secondaryBtn}>
             Collections
           </button>
           <button onClick={handleLogout} className={styles.logoutBtn}>
@@ -298,6 +298,34 @@ function BannerManagerContent() {
             </div>
           )}
 
+
+          <div className={styles.uploadArea}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className={styles.uploadBtn}
+              disabled={uploading}
+            >
+              <Icons.Upload />
+              {selectedFile ? selectedFile.name : 'Select Banner Image (Recommended size: 1584 x 396)'}
+            </button>
+          </div>
+
+          {previewUrl && (
+            <div className={styles.previewSection}>
+              <div className={styles.previewLabel}>Quick Preview</div>
+              <img src={previewUrl} alt="Preview" className={styles.preview} />
+            </div>
+          )}
+
+
+
           {!replacingId && (
             <div className={styles.formGroup}>
               <label>Select Collection</label>
@@ -315,32 +343,6 @@ function BannerManagerContent() {
               </select>
             </div>
           )}
-
-          <div className={styles.uploadArea}>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
-            />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className={styles.uploadBtn}
-              disabled={uploading}
-            >
-              <Icons.Upload />
-              {selectedFile ? selectedFile.name : 'Select Image'}
-            </button>
-          </div>
-
-          {previewUrl && (
-            <div className={styles.previewSection}>
-              <div className={styles.previewLabel}>Quick Preview</div>
-              <img src={previewUrl} alt="Preview" className={styles.preview} />
-            </div>
-          )}
-
           <button
             onClick={handleUpload}
             disabled={!selectedFile || !selectedCollection || uploading}
@@ -369,22 +371,22 @@ function BannerManagerContent() {
                       <img src={banner.imageUrl} alt={banner.collectionTitle} />
                     )}
                     <div className={styles.actions}>
-                      <button 
+                      <button
                         title="Preview"
                         className={styles.actionBtn}
                         onClick={() => setModalImageUrl(banner.imageUrl)}
                       >
                         <Icons.Eye />
                       </button>
-                      <button 
+                      <button
                         title="Replace"
                         className={styles.actionBtn}
                         onClick={() => handleReplace(banner._id, banner.collectionId)}
                       >
                         <Icons.Replace />
                       </button>
-                      <button 
-                        title="Delete" 
+                      <button
+                        title="Delete"
                         className={styles.actionBtn}
                         onClick={() => handleDelete(banner._id)}
                       >
@@ -413,7 +415,7 @@ function BannerManagerContent() {
         />
       )}
 
-      <PreviewModal 
+      <PreviewModal
         imageUrl={modalImageUrl}
         onClose={() => setModalImageUrl(null)}
       />
