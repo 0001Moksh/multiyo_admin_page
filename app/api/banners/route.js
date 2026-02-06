@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import { getBannersCollection } from '@/lib/db'
 import { requireAuth } from '@/lib/middleware'
 import { fetchShopifyCollections } from '@/lib/shopify'
+import { uploadToCloudinary } from '@/lib/cloudinary'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,11 +19,11 @@ export async function GET(request) {
       .sort({ createdAt: -1 })
       .toArray()
 
-    // Convert ObjectId to string and base64 to data URL
+    // Convert ObjectId to string - imageUrl now comes directly from Cloudinary
     const formattedBanners = bannerList.map((banner) => ({
       ...banner,
       _id: banner._id.toString(),
-      imageUrl: banner.imageData ? `data:image/${banner.imageType};base64,${banner.imageData}` : null,
+      // imageUrl is already stored in the database from Cloudinary
     }))
 
     return Response.json({ banners: formattedBanners }, { status: 200 })
@@ -76,9 +77,8 @@ export async function POST(request) {
       )
     }
 
-    // Convert to base64
-    const imageBase64 = buffer.toString('base64')
-    const dataUrl = `data:${file.type};base64,${imageBase64}`
+    // Upload to Cloudinary
+    const { url: imageUrl, publicId } = await uploadToCloudinary(buffer, 'banners')
 
     // Get collection info
     const collections = await fetchShopifyCollections()
@@ -88,10 +88,10 @@ export async function POST(request) {
       return Response.json({ error: 'Collection not found' }, { status: 404 })
     }
 
-    // Save to MongoDB
+    // Save to MongoDB with Cloudinary URL
     const bannerDoc = {
-      imageData: imageBase64,
-      imageType: fileType,
+      imageUrl,
+      publicId,
       collectionId,
       collectionTitle: collection.title,
       collectionHandle: collection.handle,
@@ -107,7 +107,7 @@ export async function POST(request) {
         message: 'Banner uploaded successfully',
         banner: {
           _id: result.insertedId.toString(),
-          imageUrl: dataUrl,
+          imageUrl,
           collectionId: bannerDoc.collectionId,
           collectionTitle: bannerDoc.collectionTitle,
           createdAt: bannerDoc.createdAt.toISOString(),

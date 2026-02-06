@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import { getBannersCollection } from '@/lib/db'
 import { requireAuth } from '@/lib/middleware'
 import { fetchShopifyCollections } from '@/lib/shopify'
+import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/cloudinary'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,14 +67,18 @@ export async function PUT(request, { params }) {
       return Response.json({ error: 'Collection not found' }, { status: 404 })
     }
 
-    // Convert to base64
-    const imageBase64 = buffer.toString('base64')
-    const dataUrl = `data:${file.type};base64,${imageBase64}`
+    // Delete old image from Cloudinary
+    if (existingBanner.publicId) {
+      await deleteFromCloudinary(existingBanner.publicId)
+    }
 
-    // Update banner
+    // Upload new image to Cloudinary
+    const { url: imageUrl, publicId } = await uploadToCloudinary(buffer, 'banners')
+
+    // Update banner with new Cloudinary URL
     const updateDoc = {
-      imageData: imageBase64,
-      imageType: fileType,
+      imageUrl,
+      publicId,
       collectionId,
       collectionTitle: collection.title,
       collectionHandle: collection.handle,
@@ -87,7 +92,7 @@ export async function PUT(request, { params }) {
         message: 'Banner replaced successfully',
         banner: {
           _id: id,
-          imageUrl: dataUrl,
+          imageUrl,
           collectionId,
           collectionTitle: collection.title,
           createdAt: existingBanner.createdAt.toISOString(),
@@ -112,6 +117,19 @@ export async function DELETE(request, { params }) {
     const { id } = params
     const banners = await getBannersCollection()
 
+    // Get banner to delete image from Cloudinary
+    const banner = await banners.findOne({ _id: new ObjectId(id) })
+    
+    if (!banner) {
+      return Response.json({ error: 'Banner not found' }, { status: 404 })
+    }
+
+    // Delete from Cloudinary
+    if (banner.publicId) {
+      await deleteFromCloudinary(banner.publicId)
+    }
+
+    // Delete from MongoDB
     const result = await banners.deleteOne({ _id: new ObjectId(id) })
 
     if (result.deletedCount === 0) {
