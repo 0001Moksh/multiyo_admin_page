@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import styles from './landing.module.css'
+import Image from "next/image";
 
 export default function LandingPage() {
   const router = useRouter()
@@ -12,13 +13,17 @@ export default function LandingPage() {
         <div className={styles.hero}>
           <h1 className={styles.title}>
             <span className={styles.brand}>
-              <img
-                src="/logo-no-bg-square.png"
+              import Image from "next/image";
+
+              <Image
+                src="/logo-no-bg-rectangular.png"
                 alt="MultiYO"
-                width="150"
-                height="150"
+                width={150}
+                height={150}
                 className="logo"
+                priority
               />
+              
             </span>
             <span className={styles.subtitle}>Admin Dashboard</span>
           </h1>
