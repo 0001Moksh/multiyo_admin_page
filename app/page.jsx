@@ -13,16 +13,7 @@ export default function LandingPage() {
         <div className={styles.hero}>
           <h1 className={styles.title}>
             <span className={styles.brand}>
-              import Image from "next/image";
-
-              <Image
-                src="/logo-no-bg-rectangular.png"
-                alt="MultiYO"
-                width={150}
-                height={150}
-                className="logo"
-                priority
-              />
+              Multi-Yo
               
             </span>
             <span className={styles.subtitle}>Admin Dashboard</span>
